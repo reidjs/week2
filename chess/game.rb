@@ -33,6 +33,7 @@ end
 
 game = Game.new
 game.display.render
+game.board.move_piece([1,0], [2,0])
 game.display.move([0,0])
 game.display.render
 game.display.move([0,0])
@@ -40,6 +41,11 @@ game.display.render
 game.display.move([0,0])
 game.display.render
 game.display.move([0,0])
+game.display.render
+game.display.move([0,0])
+game.display.render
+game.display.move([0,0])
+
 
 
 # game.play
