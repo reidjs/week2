@@ -1,5 +1,9 @@
 class OutOfBoundError < StandardError
 end
+class InvalidMoveError < StandardError
+end
+class EmptySpaceError < StandardError
+end
 
 class Board
   attr_accessor :grid, :selected_piece_pos
@@ -23,6 +27,8 @@ class Board
     rescue OutOfBoundError
       puts "Out ouf bounds"
       return false
+    rescue InvalidMoveError
+      puts "Invalid move for #{starting_piece.sym}"
     end
     @selected_piece_pos = nil
     @grid[row2][col2] = starting_piece
@@ -40,10 +46,13 @@ class Board
 
 
   def valid_move?(piece, start_pos, end_pos)
+    p piece.moves(start_pos)
     if start_pos.nil?
       raise OutOfBoundError
-    # elsif !end_pos.nil?
-    #   raise "Invalid move"
+    elsif piece.class == NullPiece
+      raise EmptySpaceError
+    elsif !piece.moves(start_pos).include?(end_pos)
+      raise InvalidMoveError
     end
   end
 
@@ -92,14 +101,18 @@ class Board
         symbol = nil
         if KNIGHTS.include?(position)
           symbol = :k
+          @grid[row][col] = Piece.new([row,col], symbol)
         elsif BISHOPS.include?(position)
           symbol = :b
+          @grid[row][col] = Piece.new([row,col], symbol)
         elsif ROOKS.include?(position)
           symbol = :r
+          @grid[row][col] = Piece.new([row,col], symbol)
         else
           symbol = :p
+          @grid[row][col] = Pawn.new([row,col], symbol)
         end
-        @grid[row][col] = Piece.new([row,col], symbol)
+        # @grid[row][col] = Piece.new([row,col], symbol)
       end
     end
   end

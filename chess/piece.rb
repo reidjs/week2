@@ -46,6 +46,13 @@ class Piece
 
 end
 
+class Pawn < Piece
+  def moves(pos)
+    row, col = pos
+    [[row + 1, col], [row - 1, col]]
+  end
+end
+
 
 
 class NullPiece < Piece
