@@ -12,10 +12,15 @@ class Game
     @display = Display.new(@board)
   end
 
-  def play
-    puts "hi"
+  def game_over
+    @board.game_over
+  end
 
-    @display.select_position(pos)
+  def play
+    until game_over
+      @display.get_input
+      @display.render
+    end
   end
 
   private
@@ -36,35 +41,7 @@ class Game
 end
 
 game = Game.new
-game.display.render
-# game.board.move_piece([1,0], [2,0])
-game.display.move([0,0])
-game.display.render
-game.display.move([0,0])
-game.display.render
-game.display.move([0,0])
-game.display.render
-game.display.move([0,0])
-game.display.render
-game.display.move([0,0])
-game.display.render
-game.display.move([0,0])
-game.display.render
-game.display.move([0,0])
-game.display.render
-game.display.move([0,0])
-game.display.render
-game.display.move([0,0])
-game.display.render
-game.display.move([0,0])
-game.display.render
-game.display.move([0,0])
-game.display.render
-game.display.move([0,0])
-game.display.render
-game.display.move([0,0])
-game.display.render
-game.display.move([0,0])
+game.play
 
 
 

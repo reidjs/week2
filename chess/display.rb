@@ -29,15 +29,9 @@ class Display
     end
   end
 
-  def select_position(pos)
-    move(pos)
-  end
 
-
-
-  def move(start_pos)
-      input = @cursor.get_input
-      # puts "Move piece from #{@cursor.start} to #{@cursor.cursor_pos}."
+  def get_input
+      @cursor.get_input
   end
 
 end

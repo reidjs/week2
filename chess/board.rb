@@ -6,7 +6,7 @@ class EmptySpaceError < StandardError
 end
 
 class Board
-  attr_accessor :grid, :selected_piece_pos
+  attr_accessor :grid, :selected_piece_pos, :game_over
   ROOKS = [[0,0], [0,7], [7,7], [7,0]]
   KNIGHTS = [[0,1], [0,6], [7,6], [7,1]]
   BISHOPS = [[0,2], [0,5], [7,5], [7,2]]
@@ -18,6 +18,7 @@ class Board
     @grid = grid
     @selected_piece_pos = nil
     fill_initial_rows
+    @game_over = false
   end
 
   def move_piece(start_pos, end_pos)
@@ -78,6 +79,10 @@ class Board
     else
       move_piece(@selected_piece_pos, pos)
     end
+  end
+
+  def escape_key
+    @game_over = true
   end
 
   def empty_grid

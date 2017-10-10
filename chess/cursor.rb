@@ -90,7 +90,8 @@ class Cursor
       update_pos(MOVES[:right])
     when :return
       notify_board
-      # update_pos(MOVES[:return])
+    when :escape
+      notify_exit
     else
       return
     end
@@ -100,6 +101,10 @@ class Cursor
   def notify_board
     @board.enter_key(@cursor_pos)
     return nil
+  end
+
+  def notify_exit
+    @board.escape_key
   end
 
   def update_pos(diff)
