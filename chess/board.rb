@@ -95,11 +95,18 @@ class Board
 
   def enter_key(pos)
     if @selected_piece_pos.nil?
-      self[pos].selected = true
-      @selected_piece_pos = pos
+      if cell_filled?(pos)
+        self[pos].selected = true
+        @selected_piece_pos = pos
+      end
     else
       move_piece(@selected_piece_pos, pos)
+      self[pos].selected = false
     end
+  end
+
+  def cell_filled?(pos)
+    self[pos].class != NullPiece
   end
 
   def escape_key
@@ -118,23 +125,23 @@ class Board
         position = [row,col]
         symbol = nil
         if KNIGHTS.include?(position)
-          symbol = :k
+          symbol = "\u2658"
           @grid[row][col] = Knight.new([row,col], symbol)
         elsif BISHOPS.include?(position)
-          symbol = :b
+          symbol = "\u2657"
           @grid[row][col] = Bishop.new([row,col], symbol)
         elsif ROOKS.include?(position)
-          symbol = :r
+          symbol = "\u2656"
           @grid[row][col] = Rook.new([row,col], symbol)
         elsif QUEENS.include?(position)
-          symbol = :Q
+          symbol = "\u2655"
           @grid[row][col] = Queen.new([row,col], symbol)
         elsif KINGS.include?(position)
-          symbol = :K
+          symbol = "\u2654"
           @grid[row][col] = King.new([row,col], symbol)
 
         else
-          symbol = :p
+          symbol = "\u2659"
           @grid[row][col] = Pawn.new([row,col], symbol)
         end
       end
