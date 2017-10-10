@@ -27,18 +27,18 @@ MOVES = {
   left: [0, -1],
   right: [0, 1],
   up: [-1, 0],
-  down: [1, 0]
+  down: [1, 0],
+  return: [0, 0]
 }
 
 class Cursor
 
-  attr_reader :cursor_pos, :board, :difference, :start
+  attr_reader :cursor_pos, :board, :difference
 
   def initialize(cursor_pos, board)
     @cursor_pos = cursor_pos
     @board = board
     @difference = [0, 0]
-    @start = nil
   end
 
   def get_input
@@ -89,22 +89,21 @@ class Cursor
     when :right
       update_pos(MOVES[:right])
     when :return
-      if @start.nil?
-        @start = @cursor_pos
-      else
-
-        puts "move from #{@start} to #{@cursor_pos}"
-        @start = nil
-      end
+      update_pos(MOVES[:return])
     else
       return
     end
 
   end
 
+  def handle_return
+
+  end
+
   def update_pos(diff)
-    # @cursor_pos.map.with_index {|axis, i| axis + diff[i]}
     @difference = diff
-    @cursor_pos = @cursor_pos.map.with_index {|axis, i| axis + diff[i]}
+    #adds difference to current cursor position
+    result = @cursor_pos.map.with_index {|axis, i| axis + diff[i]}
+    @cursor_pos = result
   end
 end

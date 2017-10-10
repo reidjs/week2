@@ -14,6 +14,8 @@ class Game
 
   def play
     puts "hi"
+
+    @display.select_position(pos)
   end
 
   private

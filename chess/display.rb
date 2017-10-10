@@ -26,18 +26,15 @@ class Display
     end
   end
 
+  def select_position(pos)
+    move(pos)
+  end
+
+
+
   def move(start_pos)
-    # render
-    # until @cursor.start.nil?
       input = @cursor.get_input
       puts "Move piece from #{@cursor.start} to #{@cursor.cursor_pos}."
-      # if input.is_a?(Array)
-      #   difference = @cursor.difference
-      #   p start_pos
-      #   end_pos = start_pos.map.with_index {|axis, i| axis + difference[i]}
-      # end
-    # end
-    # end_pos
   end
 
 end
