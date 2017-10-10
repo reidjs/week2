@@ -66,16 +66,19 @@ class Board
   def obstructing_piece?(piece, start_pos, end_pos)
     row1, col1 = start_pos
     row2, col2 = end_pos
+    team = piece.color
     if col1 == col2
       (row1 + 1 .. row2).each do |row|
-        return true if @grid[row][col1].class != NullPiece
+        cell = @grid[row][col1]
+        return true if cell.class != NullPiece && [row, col1] != end_pos
       end
     end
     if row1 == row2
       (col1 + 1 .. col2).each do |col|
-        return true if @grid[row1][col].class != NullPiece
+        return true if cell.class != NullPiece && [row, col1] != end_pos
       end
     end
+    return true if team == self[end_pos].color
     false
 
   end
@@ -124,25 +127,26 @@ class Board
       @grid[row].each_index do |col|
         position = [row,col]
         symbol = nil
+        color = (row > 5 ? :white : :black)
         if KNIGHTS.include?(position)
           symbol = "\u2658"
-          @grid[row][col] = Knight.new([row,col], symbol)
+          @grid[row][col] = Knight.new([row,col], symbol, color)
         elsif BISHOPS.include?(position)
           symbol = "\u2657"
-          @grid[row][col] = Bishop.new([row,col], symbol)
+          @grid[row][col] = Bishop.new([row,col], symbol, color)
         elsif ROOKS.include?(position)
           symbol = "\u2656"
-          @grid[row][col] = Rook.new([row,col], symbol)
+          @grid[row][col] = Rook.new([row,col], symbol, color)
         elsif QUEENS.include?(position)
           symbol = "\u2655"
-          @grid[row][col] = Queen.new([row,col], symbol)
+          @grid[row][col] = Queen.new([row,col], symbol, color)
         elsif KINGS.include?(position)
           symbol = "\u2654"
-          @grid[row][col] = King.new([row,col], symbol)
+          @grid[row][col] = King.new([row,col], symbol, color)
 
         else
           symbol = "\u2659"
-          @grid[row][col] = Pawn.new([row,col], symbol)
+          @grid[row][col] = Pawn.new([row,col], symbol, color)
         end
       end
     end

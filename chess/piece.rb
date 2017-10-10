@@ -19,11 +19,12 @@ module SteppingPiece
 end
 
 class Piece
-  attr_accessor :pos, :selected, :sym
-  def initialize(pos=[0,0], sym = " ")
+  attr_accessor :pos, :selected, :sym, :color
+  def initialize(pos=[0,0], sym = " ", color = :black)
     @pos = pos
     @selected = false
     @sym = sym
+    @color = color
   end
 
   def moves(pos)

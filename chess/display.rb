@@ -19,18 +19,23 @@ class Display
         if pos == @cursor.cursor_pos
           print " #{piece.to_s} ".colorize(:background => :light_white)
         elsif @board[pos].selected
-          print " #{piece.to_s} ".colorize(:background => :yellow)
+          print " #{piece.to_s} ".colorize(:background => :green)
         else
-          if (col.even? && row.even?) || (col.odd? && row.odd?)
-            print " #{piece.encode('utf-8').colorize(:white)} ".colorize(:background => :light_black)
-          else
-            print " #{piece.to_s.colorize(:white)} ".colorize(:background => :black)
-          end
+            color = @board[pos].color
+            if (col.even? && row.even?) || (col.odd? && row.odd?)
+              print " #{piece.to_s.colorize(color)} ".colorize(:background => :light_black)
+            else
+              print " #{piece.to_s.colorize(color)} ".colorize(:background => :light_blue)
+            end
         end
 
       end
       print "\n"
     end
+    print "\n"
+    print "\n"
+    print "\n"
+
   end
 
 
