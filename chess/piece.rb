@@ -84,7 +84,53 @@ class Bishop < Piece
 
     result
   end
-end 
+end
+class Queen < Piece
+
+  def moves(pos)
+    row_start, col_start = pos
+    result = [[row_start, col_start]]
+    for row in 0..7
+      for col in 0..7
+        if (row - row_start).abs == (col - col_start).abs
+          result << [row, col]
+        end
+        result << [row ,col] if row == row_start
+        result << [row, col] if col == col_start
+      end
+    end
+    result
+  end
+end
+
+class King < Piece
+  def moves(pos)
+    row = pos[0]
+    col = pos[1]
+    result = []
+    (row - 1 .. row + 1).each do |r|
+      (col - 1 .. col + 1).each do |c|
+        result << [r,c] if [r,c] != pos
+      end
+    end
+    result
+  end
+end
+
+class Knight < Piece
+  def moves(pos)
+    row, col = pos
+      result = []
+      ((row - 2)..(row + 2)).each do |i|
+        ((col - 2)..(col + 2)).each do |j|
+          if (i - row).abs + (j - col).abs == 3
+            result << [i, j] if i.between?(0,8) && j.between?(0, 8)
+          end
+        end
+      end
+      result
+    end
+end
 
 
 

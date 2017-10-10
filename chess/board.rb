@@ -10,6 +10,9 @@ class Board
   ROOKS = [[0,0], [0,7], [7,7], [7,0]]
   KNIGHTS = [[0,1], [0,6], [7,6], [7,1]]
   BISHOPS = [[0,2], [0,5], [7,5], [7,2]]
+  KINGS = [[0, 4], [7, 4]]
+  QUEENS = [[0, 3], [7, 3]]
+
 
   def initialize(grid = empty_grid)
     @grid = grid
@@ -90,13 +93,20 @@ class Board
         symbol = nil
         if KNIGHTS.include?(position)
           symbol = :k
-          @grid[row][col] = Piece.new([row,col], symbol)
+          @grid[row][col] = Knight.new([row,col], symbol)
         elsif BISHOPS.include?(position)
           symbol = :b
           @grid[row][col] = Bishop.new([row,col], symbol)
         elsif ROOKS.include?(position)
           symbol = :r
           @grid[row][col] = Rook.new([row,col], symbol)
+        elsif QUEENS.include?(position)
+          symbol = :Q
+          @grid[row][col] = Queen.new([row,col], symbol)
+        elsif KINGS.include?(position)
+          symbol = :K
+          @grid[row][col] = King.new([row,col], symbol)
+
         else
           symbol = :p
           @grid[row][col] = Pawn.new([row,col], symbol)
