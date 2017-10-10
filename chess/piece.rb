@@ -46,6 +46,14 @@ class Piece
 
 end
 
+class NullPiece < Piece
+  include Singleton
+  def moves
+
+  end
+
+end
+
 class Pawn < Piece
   def moves(pos)
     row, col = pos
@@ -130,16 +138,4 @@ class Knight < Piece
       end
       result
     end
-end
-
-
-
-
-class NullPiece < Piece
-  include Singleton
-  attr_accessor :x
-  def moves
-
-  end
-
 end

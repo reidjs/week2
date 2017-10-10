@@ -56,7 +56,28 @@ class Board
       raise EmptySpaceError
     elsif !piece.moves(start_pos).include?(end_pos)
       raise InvalidMoveError
+    elsif obstructing_piece?(piece, start_pos, end_pos)
+      puts "Blocking piece!"
+      raise InvalidMoveError
+      #handle invalid move
     end
+  end
+
+  def obstructing_piece?(piece, start_pos, end_pos)
+    row1, col1 = start_pos
+    row2, col2 = end_pos
+    if col1 == col2
+      (row1 + 1 .. row2).each do |row|
+        return true if @grid[row][col1].class != NullPiece
+      end
+    end
+    if row1 == row2
+      (col1 + 1 .. col2).each do |col|
+        return true if @grid[row1][col].class != NullPiece
+      end
+    end
+    false
+
   end
 
   def [](pos)
