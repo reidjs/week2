@@ -35,7 +35,7 @@ def num_from_base_to_other_base(num, base, newbase)
 
 
 end
-num_from_base_to_other_base(256, 10, 8)
+num_from_base_to_other_base(31, 10, 16)
 # def base_n_to_binary(num, base)
 #   digits = num_to_digit_array(num, base)
 #
