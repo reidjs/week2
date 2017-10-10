@@ -53,6 +53,40 @@ class Pawn < Piece
   end
 end
 
+class Rook < Piece
+  include SlidingPiece
+
+  def moves(pos)
+    result = []
+    row_start, col_start = pos
+    for row in 0..7
+      for col in 0..7
+        result << [row ,col] if row == row_start
+        result << [row, col] if col == col_start
+      end
+    end
+    result
+  end
+end
+
+class Bishop < Piece
+
+  def moves(pos)
+    row_start, col_start = pos
+    result = [[row_start, col_start]]
+    for row in 0..7
+      for col in 0..7
+        if (row - row_start).abs == (col - col_start).abs
+          result << [row, col]
+        end
+      end
+    end
+
+    result
+  end
+end 
+
+
 
 
 class NullPiece < Piece

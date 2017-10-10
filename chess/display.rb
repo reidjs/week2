@@ -17,11 +17,11 @@ class Display
         pos = [row, col]
         piece = @board[pos].sym
         if pos == @cursor.cursor_pos
-          print "[#{piece.to_s.colorize(:blue)}]"
+          print "[#{piece.to_s}]".colorize(:background => :light_white)
         elsif @board[pos].selected
-          print "[#{piece.to_s.colorize(:green)}]"
+          print "[#{piece.to_s}]".colorize(:background => :yellow)
         else
-          print "[#{piece}]"
+          print "[#{piece}]".colorize(:background => :light_black)
         end
 
       end

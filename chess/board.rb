@@ -35,8 +35,6 @@ class Board
     @grid[row2][col2] = starting_piece
     clear_cell(start_pos)
     return true
-      #if valid make start_pos null piece
-      #else make end_pos the start_position piece
   end
 
   def clear_cell(pos)
@@ -47,7 +45,7 @@ class Board
 
 
   def valid_move?(piece, start_pos, end_pos)
-    p piece.moves(start_pos)
+    # p piece.moves(start_pos)
     if start_pos.nil?
       raise OutOfBoundError
     elsif piece.class == NullPiece
@@ -70,16 +68,6 @@ class Board
     @grid.length
   end
 
-  # def enter_key(pos)
-  #   if @piece_selected == 0
-  #     self[pos].selected = true
-  #     @selected_piece_pos = pos
-  #     @piece_selected += 1
-  #   elsif @piece_selected == 1
-  #     move_piece(@selected_piece_pos, pos)
-  #
-  #   end
-  # end
   def enter_key(pos)
     if @selected_piece_pos.nil?
       self[pos].selected = true
@@ -105,15 +93,14 @@ class Board
           @grid[row][col] = Piece.new([row,col], symbol)
         elsif BISHOPS.include?(position)
           symbol = :b
-          @grid[row][col] = Piece.new([row,col], symbol)
+          @grid[row][col] = Bishop.new([row,col], symbol)
         elsif ROOKS.include?(position)
           symbol = :r
-          @grid[row][col] = Piece.new([row,col], symbol)
+          @grid[row][col] = Rook.new([row,col], symbol)
         else
           symbol = :p
           @grid[row][col] = Pawn.new([row,col], symbol)
         end
-        # @grid[row][col] = Piece.new([row,col], symbol)
       end
     end
   end
