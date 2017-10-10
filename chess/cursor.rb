@@ -89,15 +89,17 @@ class Cursor
     when :right
       update_pos(MOVES[:right])
     when :return
-      update_pos(MOVES[:return])
+      notify_board
+      # update_pos(MOVES[:return])
     else
       return
     end
 
   end
 
-  def handle_return
-
+  def notify_board
+    @board.enter_key(@cursor_pos)
+    return nil
   end
 
   def update_pos(diff)

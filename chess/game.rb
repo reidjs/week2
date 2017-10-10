@@ -33,6 +33,13 @@ end
 
 game = Game.new
 game.display.render
-i = gets.chomp
+game.display.move([0,0])
+game.display.render
+game.display.move([0,0])
+game.display.render
+game.display.move([0,0])
+game.display.render
+game.display.move([0,0])
+
 
 # game.play

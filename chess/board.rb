@@ -25,6 +25,9 @@ class Board
     @grid.length
   end
 
+  def enter_key(pos)
+    self[pos].selected = true 
+  end
 
   def empty_grid
     x = NullPiece.instance
