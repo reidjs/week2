@@ -29,6 +29,7 @@ class Board
       return false
     rescue InvalidMoveError
       puts "Invalid move for #{starting_piece.sym}"
+      return false
     end
     @selected_piece_pos = nil
     @grid[row2][col2] = starting_piece
