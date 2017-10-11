@@ -1,33 +1,165 @@
-require 'singleton'
-require 'colorize'
-require_relative 'cursor'
+class OutOfBoundError < StandardError
+end
+class InvalidMoveError < StandardError
+end
+class EmptySpaceError < StandardError
+end
+
 class Board
-  attr_accessor :grid
+  attr_accessor :grid, :selected_piece_pos, :game_over
   ROOKS = [[0,0], [0,7], [7,7], [7,0]]
   KNIGHTS = [[0,1], [0,6], [7,6], [7,1]]
   BISHOPS = [[0,2], [0,5], [7,5], [7,2]]
+  KINGS = [[0, 4], [7, 4]]
+  QUEENS = [[0, 3], [7, 3]]
+
 
   def initialize(grid = empty_grid)
     @grid = grid
+    @selected_piece_pos = nil
     fill_initial_rows
+    @game_over = false
   end
 
   def move_piece(start_pos, end_pos)
-    if start_pos.nil?
-      raise "Piece not found"
-    elsif !end_pos.nil?
-      raise "Invalid move"
+    row1, col1 = start_pos
+    row2, col2 = end_pos
+    starting_piece = @grid[row1][col1]
+    ending_piece = @grid[row2][col2]
+    begin
+      valid_move?(starting_piece, start_pos, end_pos)
+    rescue OutOfBoundError
+      puts "Out ouf bounds"
+      return false
+    rescue InvalidMoveError
+      puts "Invalid move for #{starting_piece.sym}"
+      return false
     end
+    deselect_piece
+    starting_piece.deselect!
+    @grid[row2][col2] = starting_piece
+    clear_cell(start_pos)
+    return true
+  end
+
+  def clear_cell(pos)
+    x, y = pos
+    @grid[x][y] = NullPiece.instance
+  end
+
+
+
+  def valid_move?(piece, start_pos, end_pos)
+    # p piece.moves(start_pos)
+    if start_pos.nil?
+      raise OutOfBoundError
+    elsif piece.class == NullPiece
+      raise EmptySpaceError
+    elsif !piece.moves(start_pos).include?(end_pos)
+      raise InvalidMoveError
+    elsif obstructing_piece?(piece, start_pos, end_pos)
+      puts "Blocking piece!"
+      raise InvalidMoveError
+      #handle invalid move
+    end
+  end
+
+  def check_diagonal(startpos, finalpos)
+      row1, col1 = startpos
+      row2, col2 = finalpos
+      result = []
+      until [row1, col1] == finalpos
+        row1 > row2 ? row1 -= 1 : row1 += 1
+        col1 > col2 ? col1 -= 1 : col1 += 1
+        result << [row1, col1]
+      end
+      result[0..-2]
+  end
+
+  def obstructing_piece?(piece, start_pos, end_pos)
+    row1, col1 = start_pos
+    row2, col2 = end_pos
+    team = piece.color
+    if col1 == col2
+      (row1 + 1 .. row2).each do |row|
+        cell = @grid[row][col1]
+        return true if cell.class != NullPiece && [row, col1] != end_pos
+      end
+    end
+    if row1 == row2
+      (col1 + 1 .. col2).each do |col|
+        return true if cell.class != NullPiece && [row, col1] != end_pos
+      end
+    end
+
+    return true if team == self[end_pos].color
+    if piece.class == Bishop
+      results = check_diagonal(start_pos, end_pos)
+      return true if results.any? { |pos| self[pos].class != NullPiece }
+    end
+    return true if team == self[end_pos].color
+    false
+
   end
 
   def [](pos)
     @grid[pos[0]][pos[1]]
   end
 
+  def []=(pos, value)
+    @grid[pos[0]][pos[1]] = value
+  end
+
+
   def size
     @grid.length
   end
 
+  # def selected
+  #
+  # end
+  #
+  # def select_piece
+  #
+  # end
+  def deselect_piece
+    @selected_piece_pos = nil
+
+  end
+
+  def select_piece(pos)
+    if @selected_piece_pos.nil?
+      @selected_piece_pos = pos
+    end
+  end
+
+  def selected_piece?
+    !@selected_piece_pos.nil?
+  end
+
+  def enter_key(pos)
+    cell = self[pos]
+    if !selected_piece?
+      # self[pos].selected = true
+      if cell.select!
+        @selected_piece_pos = pos
+      end
+    elsif @selected_piece_pos == pos
+      cell.deselect!
+      deselect_piece
+    else
+      move_piece(@selected_piece_pos, pos)
+    end
+
+  end
+
+  def cell_filled?(pos)
+    self[pos].class != NullPiece
+  end
+
+  def escape_key
+    @game_over = true
+  end
 
   def empty_grid
     x = NullPiece.instance
@@ -40,174 +172,31 @@ class Board
       @grid[row].each_index do |col|
         position = [row,col]
         symbol = nil
+        color = (row > 5 ? :white : :black)
         if KNIGHTS.include?(position)
-          symbol = :k
+          symbol = "\u2658"
+          @grid[row][col] = Knight.new([row,col], symbol, color)
         elsif BISHOPS.include?(position)
-          symbol = :b
+          symbol = "\u2657"
+          @grid[row][col] = Bishop.new([row,col], symbol, color)
         elsif ROOKS.include?(position)
-          symbol = :r
+          symbol = "\u2656"
+          @grid[row][col] = Rook.new([row,col], symbol, color)
+        elsif QUEENS.include?(position)
+          symbol = "\u2655"
+          @grid[row][col] = Queen.new([row,col], symbol, color)
+        elsif KINGS.include?(position)
+          symbol = "\u2654"
+          @grid[row][col] = King.new([row,col], symbol, color)
+
         else
-          symbol = :p
+          symbol = "\u2659"
+          @grid[row][col] = Pawn.new([row,col], symbol, color)
         end
-        @grid[row][col] = Piece.new([row,col], symbol)
       end
     end
   end
 
-end
-
-class Piece
-  attr_accessor :pos, :selected, :sym
-  def initialize(pos=[0,0], sym = " ")
-    @pos = pos
-    @selected = false
-    @sym = sym
-  end
-
-  def moves(pos)
-
-  end
-
-  def to_s
-  end
-
-  def empty?()
-  end
-
-  def symbol()
-  end
-
-  private
-
-  def move_into_check(to_pos)
-  end
-
-end
-
-module SlidingPiece
-
-end
-#[0,0]
-module SteppingPiece
-  def get_moves(pos)
-    row = pos[0]
-    col = pos[1]
-    result = []
-    (row - 1 .. row + 1).each do |r|
-      (col - 1 .. col + 1).each do |c|
-        # next if r == c
-        result << [r,c] if [r,c] != pos
-      end
-    end
-    result
-  end
-end
-
-# class Pawn < Piece
-#   include SteppingPiece
-#
-# end
-
-# class Test
-#   include SteppingPiece
-# end
-# z = Test.new
-# p z.get_moves([1,1])
-
-class NullPiece < Piece
-  include Singleton
-  attr_accessor :x
-  def moves
-
-  end
-
-end
-
-class Display
-  attr_accessor :board, :cursor
-
-  def initialize(board)
-    @board = board
-    @cursor = Cursor.new([0,0], board)
-    # @cursor_pos = [0,0]
-  end
-
-  def render
-    # system("clear")
-
-    @board.size.times do |row|
-      @board.size.times do |col|
-        piece = @board[[row,col]].sym
-        if [row, col] == @cursor.cursor_pos
-          print "[#{piece.to_s.colorize(:blue)}]"
-        else
-          print "[#{piece}]"
-        end
-
-      end
-      print "\n"
-    end
-  end
-
-  def move(start_pos)
-    # render
-    # until @cursor.start.nil?
-      input = @cursor.get_input
-      puts "Move piece from #{@cursor.start} to #{@cursor.cursor_pos}."
-      # if input.is_a?(Array)
-      #   difference = @cursor.difference
-      #   p start_pos
-      #   end_pos = start_pos.map.with_index {|axis, i| axis + difference[i]}
-      # end
-    # end
-    # end_pos
-  end
-
-end
-
-class Game
-
-  def initialize(players)
-    @players = players
-    @board = Board.new
-    @display = Display.new(@board)
-  end
-
-  def play
-
-  end
-
-  private
-
-  def notify_players
-
-  end
-
-  def swap_turn!
-
-  end
 
 
 end
-
-b = Board.new
-d = Display.new(b)
-# input = d.cursor.get_input
-f = d.move([0,0])
-d.render
-p f
-f = d.move(f)
-d.render
-p f
-f = d.move(f)
-d.render
-p f
-f = d.move(f)
-d.render
-p f
-
-
-# d.move(0)
-# d.move(0)
-# d.move(0)
-# d.move(0)
