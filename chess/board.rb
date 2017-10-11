@@ -36,7 +36,7 @@ class Board
       return false
     end
     deselect_piece
-
+    starting_piece.deselect!
     @grid[row2][col2] = starting_piece
     clear_cell(start_pos)
     return true
