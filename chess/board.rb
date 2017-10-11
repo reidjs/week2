@@ -35,7 +35,8 @@ class Board
       puts "Invalid move for #{starting_piece.sym}"
       return false
     end
-    @selected_piece_pos = nil
+    deselect_piece
+
     @grid[row2][col2] = starting_piece
     clear_cell(start_pos)
     return true
@@ -96,16 +97,56 @@ class Board
     @grid.length
   end
 
-  def enter_key(pos)
+  # def selected
+  #
+  # end
+  #
+  # def select_piece
+  #
+  # end
+  def deselect_piece
+    @selected_piece_pos = nil
+
+  end
+
+  def select_piece(pos)
     if @selected_piece_pos.nil?
-      if cell_filled?(pos)
-        self[pos].selected = true
+      @selected_piece_pos = pos
+    end
+  end
+
+  def selected_piece?
+    !@selected_piece_pos.nil?
+  end
+
+  def enter_key(pos)
+    cell = self[pos]
+    if !selected_piece?
+      # self[pos].selected = true
+      if cell.select!
         @selected_piece_pos = pos
       end
+    elsif @selected_piece_pos == pos
+      cell.deselect!
+      deselect_piece
     else
       move_piece(@selected_piece_pos, pos)
-      self[pos].selected = false
     end
+
+    # if @selected_piece_pos.nil?
+    #   if cell_filled?(pos)
+    #     self[pos].selected = true
+    #     @selected_piece_pos = pos
+    #   end
+    # elsif @selected_piece_pos == pos
+    #   puts "DESELECT"
+    #   @selected_piece_pos = nil
+    #   self[pos].selected = false
+    # else
+    #   move_piece(@selected_piece_pos, pos)
+    #
+    #   self[pos].selected = false
+    # end
   end
 
   def cell_filled?(pos)

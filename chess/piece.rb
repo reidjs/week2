@@ -27,6 +27,15 @@ class Piece
     @color = color
   end
 
+  def select!
+    @selected = true
+    true
+  end
+
+  def deselect!
+    @selected = false
+  end
+
   def moves(pos)
 
   end
@@ -49,7 +58,14 @@ end
 
 class NullPiece < Piece
   include Singleton
+  def initialize
+    super([0,0], sym= " ", :blue)
+  end
+
   def moves
+
+  end
+  def select!
 
   end
 
