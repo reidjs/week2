@@ -64,6 +64,18 @@ class Board
     end
   end
 
+  def check_diagonal(startpos, finalpos)
+      row1, col1 = startpos
+      row2, col2 = finalpos
+      result = []
+      until [row1, col1] == finalpos
+        row1 > row2 ? row1 -= 1 : row1 += 1
+        col1 > col2 ? col1 -= 1 : col1 += 1
+        result << [row1, col1]
+      end
+      result[0..-2]
+  end
+
   def obstructing_piece?(piece, start_pos, end_pos)
     row1, col1 = start_pos
     row2, col2 = end_pos
@@ -78,6 +90,12 @@ class Board
       (col1 + 1 .. col2).each do |col|
         return true if cell.class != NullPiece && [row, col1] != end_pos
       end
+    end
+
+    return true if team == self[end_pos].color
+    if piece.class == Bishop
+      results = check_diagonal(start_pos, end_pos)
+      return true if results.any? { |pos| self[pos].class != NullPiece }
     end
     return true if team == self[end_pos].color
     false
@@ -133,20 +151,6 @@ class Board
       move_piece(@selected_piece_pos, pos)
     end
 
-    # if @selected_piece_pos.nil?
-    #   if cell_filled?(pos)
-    #     self[pos].selected = true
-    #     @selected_piece_pos = pos
-    #   end
-    # elsif @selected_piece_pos == pos
-    #   puts "DESELECT"
-    #   @selected_piece_pos = nil
-    #   self[pos].selected = false
-    # else
-    #   move_piece(@selected_piece_pos, pos)
-    #
-    #   self[pos].selected = false
-    # end
   end
 
   def cell_filled?(pos)

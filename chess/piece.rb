@@ -106,7 +106,6 @@ class Bishop < Piece
         end
       end
     end
-
     result
   end
 end
