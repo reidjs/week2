@@ -1,0 +1,35 @@
+
+body {
+  font-family: "Arial, sans-serif";
+  background-color: rgb(224, 213, 213)
+}
+
+h1 {
+  font-size: 38px;
+}
+
+h2 {
+  font-size: 32px;
+}
+
+.ingredients-list {
+  list-style: square inside;
+}
+
+ol {
+  list-style: circle inside;
+}
+
+header > img {
+  width: 100px;
+}
+
+ul li a {
+  text-decoration: none;
+
+}
+
+.user_review {
+
+  font-style: italic;
+}
