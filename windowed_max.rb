@@ -55,22 +55,28 @@ end
 
 class StackQueue
   def initialize
-    @s1 = MyStack.new
-    @s2 = MyStack.new
+    @in = MyStack.new
+    @out = MyStack.new
   end
-  def enqueue
-    @s2.push(@s1.pop) if !empty?
+  def enqueue(el)
+    @in.push(el)
+    if self.size
+    @in.push(@out.pop)
+
   end
   def empty?
-    @s1.empty?
   end
   def dequeue
-    @s2.pop
+
   end
   def size
-    @s2.length
+    @in.length + @out.length 
   end
 end
+
+data = [1, 0, 2, 5, 4, 8]
+
+
 
 # class MinMaxStackQueue
 #   def initialize(stack)
