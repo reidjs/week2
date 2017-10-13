@@ -1,0 +1,47 @@
+div {
+}
+
+#first-div {
+  background-color: #39cccc;
+  height: 200px;
+  width: 200px;
+  padding: 50px;
+  border: 5px solid black;
+  box-sizing: border-box;
+  /*overflow: scroll;*/
+}
+
+#second-div {
+  background-color: #ff4136;
+  height: 200px;
+  width: 200px;
+  padding: 50px;
+  border: 5px solid black;
+}
+
+#third-div {
+  min-height: 10px;
+  background-color: green;
+
+}
+
+.image-1-container {
+  background-color: blue;
+  width: 200px;
+  height: 600px;
+}
+.image-1-container {
+  background-color: blue;
+  min-width: 200px;
+  height: 600px;
+  display: inline-block;
+}
+
+img {
+  width: 10%
+}
+
+p {
+  /*background-color: #7fdbff;*/
+  display: inline-block;
+}
