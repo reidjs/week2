@@ -1,2 +1,5 @@
-Second week
-modify the readme
+Topic: OOP
+Optimization and Big O notation
+Chess 
+LRU Cache 
+Test Driven Development

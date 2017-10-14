@@ -57,11 +57,15 @@ class StackQueue
   def initialize
     @in = MyStack.new
     @out = MyStack.new
+    @w = 3
+    @h = {}
   end
   def enqueue(el)
     @in.push(el)
-    if self.size
-    @in.push(@out.pop)
+    if size > @w
+
+      @out.pop
+    end
 
   end
   def empty?
@@ -70,7 +74,7 @@ class StackQueue
 
   end
   def size
-    @in.length + @out.length 
+    @in.length + @out.length
   end
 end
 
